@@ -1,13 +1,10 @@
 name: Build app
 
-# Builds Concat - the Slint window, `src/crates/concat` - for every
-# platform and architecture it ships on, each on a runner of that
-# architecture so nothing is cross-compiled, and uploads one artifact per
-# target:
+# Builds Concat - the Slint window, `src/crates/concat` - for Windows x86_64
+# and uploads one artifact for that target. Other desktop targets are
+# temporarily disabled below:
 #
-#   macOS    arm64 (Apple silicon)   x86_64 (Intel)     -> Concat-*.dmg
-#   Linux    x86_64                  aarch64            -> Concat-*.deb, .rpm, .AppImage, .pkg.tar.zst
-#   Windows  x86_64                  (aarch64, #326)    -> Concat-*-setup.exe, .msi
+#   Windows  x86_64                  -> Concat-*-setup.exe, .msi
 #
 # Installers and binaries only: the program is not shipped as an archive
 # of a folder to unpack, so what a person downloads is what they run.
@@ -42,8 +39,8 @@ name: Build app
 # - Every prebuilt dependency downloaded here is pinned to one file and its
 #   digest in scripts/ci/deps.lock, and every action to a commit.
 #
-# The six targets are a matrix so one fails without taking the rest down;
-# `fail-fast` is off for the same reason.
+# The target is kept in a matrix so additional platforms can be re-enabled
+# independently later; `fail-fast` remains off for the same reason.
 on:
   workflow_dispatch:
 
@@ -119,21 +116,6 @@ jobs:
         include:
           # `ffmpeg` and `ort` name the target the way each project's
           # release archives do.
-          - platform: macos
-            arch: arm64
-            os: macos-15
-            target: aarch64-apple-darwin
-          - platform: macos
-            arch: x86_64
-            os: macos-15-intel
-            target: x86_64-apple-darwin
-            # No `ggml` row: built as 0.2.7 was, with no AVX2. This bundle
-            # runs on macOS 12 again, and so on the 2013 Mac Pro, whose Ivy
-            # Bridge has AVX and nothing newer; Intel Macs are about one
-            # download in a hundred, and slower captions there beat a crash.
-          # 22.04, not latest: the binary links the build machine's glibc,
-          # so the oldest supported runner is what keeps it runnable on
-          # older distributions.
           - platform: windows
             arch: x86_64
             os: windows-2022
