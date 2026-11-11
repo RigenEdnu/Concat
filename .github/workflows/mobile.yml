@@ -72,15 +72,14 @@ on:
       ANDROID_KEY_PASSWORD:
         description: The key's own password; the keystore's when unset
         required: false
-  pull_request:
-  # Every push to main, so main is known to build for phones; a push that
-  # changes only words for people to read builds nothing.
-  push:
-    branches: [main]
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - "scripts/readme/**"
+  # Temporary: disable automatic phone builds on push/PR
+  # pull_request:
+  # push:
+  #   branches: [main]
+  #   paths-ignore:
+  #     - "**.md"
+  #     - "docs/**"
+  #     - "scripts/readme/**"
   workflow_dispatch:
 
 # Keyed by the calling workflow too, so a call from a release never shares
