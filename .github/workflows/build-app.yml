@@ -369,6 +369,15 @@ jobs:
             echo "CARGO_PROFILE_APP_CODEGEN_UNITS=16"
           } >> "$GITHUB_ENV"
 
+      - name: Thin LTO (Windows)
+        if: matrix.platform == 'windows'
+        shell: bash
+        run: |
+          {
+            echo "CARGO_PROFILE_APP_LTO=thin"
+            echo "CARGO_PROFILE_APP_CODEGEN_UNITS=16"
+          } >> "$GITHUB_ENV"
+
       # ── Windows ────────────────────────────────────────────────────────
       # LLVM: libclang for bindgen on both architectures, the C/C++
       # compiler on arm64, and llvm-objdump for the instruction-set scan.
